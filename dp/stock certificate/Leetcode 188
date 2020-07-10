@@ -1,0 +1,19 @@
+int maxProfit(int k, vector<int>& prices) {
+    int length = prices.size();
+    if(length <= 1 || k == 0) return 0;
+    k = min(k, length/2);
+    vector<int> dp(2*k);
+    for(int j = 0; j < k; j++){
+        dp[2*j] = -prices[0];
+        dp[2*j+1] = 0;
+    }
+    for(int i = 1; i < length; i++){
+        for(int j = k-1; j >= 1; j--){
+            dp[2*j+1] = max(dp[2*j+1], dp[2*j] + prices[i]);
+            dp[2*j] = max(dp[2*j], dp[2*j-1] - prices[i]);
+        }
+        dp[1] = max(dp[1], dp[0] + prices[i]);
+        dp[0] = max(dp[0], -prices[i]);
+    }
+    return dp[2*k-1];
+}
